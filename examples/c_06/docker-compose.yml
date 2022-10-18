@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  canary:
+    image: canary:dev
+    privileged: true
+    volumes:
+      - ./:/input/:rw
+    command:
+      - mutate
+      - --base=/input
+      - --file=src/original.h
+      - --unit=add
+      - --out=./
+      - --mutations=5
+      - --build_command=make -C /input/ build
+      - --test_command=/input/build/c_06_test
+      - --persist
+      - --testing_backend=cutest
+      - --log
+      # - cfg
+      # - --base=/input
+      # - --file=src/original.h
+      # - --unit=add
+      # - generate
+      # - --base=/input
+      # - --file=src/original.h
+      # - --test=tests
+      # - --persist
